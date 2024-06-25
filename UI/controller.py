@@ -8,10 +8,22 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
-    def handle_hello(self, e):
-        name = self._view.txt_name.value
-        if name is None or name == "":
-            self._view.create_alert("Inserire il nome")
+    def handle_grafo(self, e):
+        numero = self._view.txt_durata.value
+        if numero is None:
+            self._view.create_alert("Non hai inserito nessun numero")
             return
-        self._view.txt_result.controls.append(ft.Text(f"Hello, {name}!"))
+        try:
+            durata = int(numero)
+        except ValueError:
+            self._view.create_alert("Valore inserito non corretto!")
+            return
+        self._model.buildGraph(durata)
+        self._view.txt_result.controls.append(ft.Text(f"Grafo correttamente creato!"))
+        nNodes, nEdges = self._model.getCaratteristiche()
+        self._view.txt_result.controls.append(ft.Text(f"Il grafo creato ha {nNodes} nodi"))
+        self._view.txt_result.controls.append(ft.Text(f"Il grafo creato ha {nEdges} archi"))
         self._view.update_page()
+
+    def handle_adiacenze(self, e):
+        pass
